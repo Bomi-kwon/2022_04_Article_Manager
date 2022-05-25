@@ -9,8 +9,8 @@ public class Main {
 		System.out.println("==프로그램 시작==");
 
 		Scanner sc = new Scanner(System.in);
-		int 마지막_번호;
-		int id = 0;
+		int 마지막_번호 = 0;
+		
 		// id는 꼭 반복문 밖에다가 정의해야한다!!
 		// 안에서 정의하면 계속 0으로 초기화되기 때문!!
 
@@ -43,19 +43,56 @@ public class Main {
 				// article size가 3이면 index는 0,1,2 있으므로
 				// size - 1 부터 시작해야됨!
 				// 글은 보통 최신순으로 있기때문에 거꾸로 나타내야됨!
-				
-				System.out.printf("%d, %s\n", article.id, article.title);
+				System.out.printf("번호 | 제목\n");
+				System.out.printf("%d | %s\n", article.id, article.title);
 			}
 				
-				
 				System.out.println("게시글이 있습니다.");
-			
 			}
 			
 			else if (command.length() == 0) {
 				System.out.println("명령어를 입력해주세요.");
 				continue;
 				// 아무것도 안쓰고 엔터치면 명령어 쓰라고 해야됨.
+			}
+			
+			else if (command.startsWith("article detail ")) {
+				//article detail로 시작한다면~
+				String[] commandBits = command.split(" ");
+				// 입력한걸 띄어쓰기를 기준으로 자르겠다.
+				int id = Integer.parseInt(commandBits[2]);
+				// 인덱스 두번째, 즉 세번째 조각을 id라고 보겠다.
+				
+				
+				Article foundArticle = null;
+				
+				for( int i = 0; i < articles.size();i++) {
+					Article article = articles.get(i);
+					//for 반복문을 돌 때마다 arraylist을 순회(풀스캔)하며 i를 뽑아오겠다.
+				
+					
+					if(article.id == id) {
+						// 생성된 게시물의 번호와 commmandBits[2]와 똑같다면
+						
+						foundArticle = article;
+						//찾았으면, foundArticle에 article을 덮어쓰겠다.
+						
+						break;
+					}
+				}
+				
+				if (foundArticle == null) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n",id);
+					continue;
+				} 
+				// id 찾고 article에 연결되서 foundArticle에 넣는다면~
+					System.out.printf("%d번 게시물은 존재합니다.\n", id);
+					System.out.printf("번호 : %d\n",foundArticle.id);
+					System.out.printf("날짜 : 2022-12-12 12:12:12\n");
+					System.out.printf("제목 : %s\n",foundArticle.title);
+					System.out.printf("내용 : %s\n",foundArticle.body);
+				
+				
 			}
 			
 			else if (command.equals("article write")) {
@@ -65,9 +102,9 @@ public class Main {
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
 				// 반복문 밖에서 id 0이었으므로 1 더해줘야됨
-				마지막_번호 = id + 1;
-				System.out.printf("%d번글이 생성되었습니다.\n", 마지막_번호);
-				id = 마지막_번호;
+				int id = 마지막_번호 + 1;
+				System.out.printf("%d번글이 생성되었습니다.\n", id);
+				마지막_번호 = id;
 				// 만약에 그냥 마지막_번호++ 이라고 적으면
 				// 그건 id와는 전혀 상관없는 일이 된다.
 				// 그래서 id도 +1 해주던지 아니면 id에 마지막_번호 덮어쓰기
