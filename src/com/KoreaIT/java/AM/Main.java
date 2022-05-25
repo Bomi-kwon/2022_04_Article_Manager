@@ -25,7 +25,7 @@ public class Main {
 		while (true) {
 			// true이므로 반복문은 계속 무한대로 돌아간다.
 			// 그래서 나중에 반복문 깨고 나올 break를 꼭 해줘야함.
-			System.out.println("명령어 ) ");
+			System.out.printf("명령어 ) ");
 			String command = sc.nextLine().trim();
 			// 내가 입력한 문장을 command라는 변수에 저장하겠음.
 			// 한줄에 쓰는 문장 하나를 통째로 취급!
@@ -37,9 +37,19 @@ public class Main {
 				continue;
 				// 게시글이 없다고만 하고 끝나지 않고
 				// 다시 스킵하고 위로 올라가도록 continue 해줘야됨.
-			} else {
-				System.out.println("게시글이 있습니다.");
+			} for (int i = articles.size()-1; i >=0; i--) {
+				Article article = articles.get(i);
+				// i가 변할 때마다 노트에 작성중(기억중)
+				// article size가 3이면 index는 0,1,2 있으므로
+				// size - 1 부터 시작해야됨!
+				// 글은 보통 최신순으로 있기때문에 거꾸로 나타내야됨!
+				
+				System.out.printf("%d, %s\n", article.id, article.title);
 			}
+				
+				
+				System.out.println("게시글이 있습니다.");
+			
 			}
 			
 			else if (command.length() == 0) {
@@ -50,9 +60,9 @@ public class Main {
 			
 			else if (command.equals("article write")) {
 
-				System.out.println("제목 : ");
+				System.out.printf("제목 : ");
 				String title = sc.nextLine();
-				System.out.println("내용 : ");
+				System.out.printf("내용 : ");
 				String body = sc.nextLine();
 				// 반복문 밖에서 id 0이었으므로 1 더해줘야됨
 				마지막_번호 = id + 1;
