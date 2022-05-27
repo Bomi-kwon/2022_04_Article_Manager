@@ -62,25 +62,17 @@ public class Main {
 				// 입력한걸 띄어쓰기를 기준으로 자르겠다.
 				int id = Integer.parseInt(commandBits[2]);
 				// 인덱스 두번째, 즉 세번째 조각을 id라고 보겠다.
-				
-				
 				Article foundArticle = null;
-				
 				for( int i = 0; i < articles.size();i++) {
 					Article article = articles.get(i);
 					//for 반복문을 돌 때마다 arraylist을 순회(풀스캔)하며 i를 뽑아오겠다.
-				
-					
 					if(article.id == id) {
 						// 생성된 게시물의 번호와 commmandBits[2]와 똑같다면
-						
 						foundArticle = article;
 						//찾았으면, foundArticle에 article을 덮어쓰겠다.
-						
 						break;
 					}
 				}
-				
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n",id);
 					continue;
@@ -96,7 +88,6 @@ public class Main {
 			}
 			
 			else if (command.equals("article write")) {
-
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
 				System.out.printf("내용 : ");
@@ -108,7 +99,6 @@ public class Main {
 				// 만약에 그냥 마지막_번호++ 이라고 적으면
 				// 그건 id와는 전혀 상관없는 일이 된다.
 				// 그래서 id도 +1 해주던지 아니면 id에 마지막_번호 덮어쓰기
-
 				Article article = new Article(id, title, body);
 				// 객체 리모콘을 담을 변수 article 생성.
 				// 인자로 번호, 제목, 내용이 있음
@@ -116,6 +106,33 @@ public class Main {
 				// Article 클래스만 담을 arraylist랑 연결한 변수 articles에
 				// article 변수가 나타내는 인자 가진 Article을 담겠다??
 				// 여기는 해석이 잘.. 안된다.
+			}
+			
+			
+			else if (command.startsWith("article delete ")) {
+				String[] commandBits = command.split(" ");
+				int id = Integer.parseInt(commandBits[2]);
+				Article foundArticle = null;
+				int foundIndex = -1;
+				//새로운 변수 도입해서 아무값도 아닌 -1 넣어주기
+				for( int i = 0; i < articles.size();i++) {
+					Article article = articles.get(i);
+					//for 반복문을 돌 때마다 arraylist을 순회(풀스캔)하며 i를 뽑아오겠다.
+					if(article.id == id) {
+						foundIndex = i;
+						//일치하는거 찾으면 foundIndex에 그 글의 i 도입하기
+						//예를 들어 1번 2번 글 쓰고 삭제한 수 3번글 다시 쓰면
+						//3번 글의 index는 0번이 되므로 id는 3번이고 index는 0인 글 지우면됨.
+						break;
+					}
+				}
+				if (foundIndex == -1) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n",id);
+					continue;
+				} 
+				articles.remove(foundIndex);
+				System.out.printf("%d번 게시물을 삭제하였습니다.\n",id);
+				
 			}
 			
 			
