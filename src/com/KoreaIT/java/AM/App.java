@@ -47,16 +47,32 @@ public class App {
 			// 한줄에 쓰는 문장 하나를 통째로 취급!
 			// trim은 뒤에 띄어쓰기 날려주는것!!
 
-			if (command.equals("article list")) {
+			if (command.startsWith("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("게시글이 없습니다.");
 					continue;
 					// 게시글이 없다고만 하고 끝나지 않고
 					// 다시 스킵하고 위로 올라가도록 continue 해줘야됨.
 				}
+				String searchKeyword = command.substring("article list".length()).trim();
+				List<Article> forPrintArticles = articles;
+				if (searchKeyword.length() > 0) {
+					forPrintArticles = new ArrayList<>();
+					// 검색어가 있으면 새 창고 하나 지어놓는다
+					for (Article article : articles) {
+						if (article.title.contains(searchKeyword)) {
+							forPrintArticles.add(article);
+							// 만약에 검색어와 일치하는게 제목에 있으면 창고에 넣는다.
+						}
+					}
+					if (forPrintArticles.size() == 0) {
+						System.out.println("검색 결과가 없습니다.");
+						// 검색어가 없으면 새 창고를 안 만드니까 forPrintArticles 크기0.
+					}
+				}
 				System.out.printf("번호  | 제목   | 조회 \n");
-				for (int i = articles.size() - 1; i >= 0; i--) {
-					Article article = articles.get(i);
+				for (int i = forPrintArticles.size() - 1; i >= 0; i--) {
+					Article article = forPrintArticles.get(i);
 					// i가 변할 때마다 노트에 작성중(기억중)
 					// article size가 3이면 index는 0,1,2 있으므로
 					// size - 1 부터 시작해야됨!
@@ -79,7 +95,7 @@ public class App {
 				// 인덱스 두번째, 즉 세번째 조각을 id라고 보겠다.
 				Article foundArticle = getArticleById(id);
 				// get 함수로 Article타입을 찾아서 foundArticle에 넣겠다.(id로 찾겠다)
-				
+
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 					continue;
@@ -174,14 +190,14 @@ public class App {
 		}
 		return -1;
 	}
-	
+
 	private Article getArticleById(int id) {
 		int index = getArticleIndexById(id);
 		if (index != -1) {
 			return articles.get(index);
 		}
 		return null;
-		
+
 //		for (int i = 0; i < articles.size(); i++) {
 //			Article article = articles.get(i);
 //			// for 반복문을 돌 때마다 arraylist을 순회(풀스캔)하며 i를 뽑아오겠다.
@@ -191,18 +207,16 @@ public class App {
 //				// 찾았으면, foundArticle에 article을 덮어쓰겠다.
 //			}
 //		}
-		
-		
+
 //		for (Article article : articles) {
 //			if (article.id == id) {
 //				return article;
 //			}
 //		}
 //		return null;
-		
-		
+
 	}
-	
+
 	private void makeTestData() {
 		System.out.println("테스트를 위한 데이터를 생성합니다.");
 		articles.add(new Article(1, Util.getNowDateStr(), "제목1", "내용1", 8));
