@@ -31,23 +31,22 @@ public class Main {
 			// 한줄에 쓰는 문장 하나를 통째로 취급!
 			// trim은 뒤에 띄어쓰기 날려주는것!!
 
+			
 			if (command.equals("article list")) {
 				if (articles.size() == 0) {
 				System.out.println("게시글이 없습니다.");
 				continue;
 				// 게시글이 없다고만 하고 끝나지 않고
 				// 다시 스킵하고 위로 올라가도록 continue 해줘야됨.
-			} for (int i = articles.size()-1; i >=0; i--) {
+			} System.out.printf("번호 | 제목\n");
+				for (int i = articles.size()-1; i >=0; i--) {
 				Article article = articles.get(i);
 				// i가 변할 때마다 노트에 작성중(기억중)
 				// article size가 3이면 index는 0,1,2 있으므로
 				// size - 1 부터 시작해야됨!
 				// 글은 보통 최신순으로 있기때문에 거꾸로 나타내야됨!
-				System.out.printf("번호 | 제목\n");
 				System.out.printf("%d | %s\n", article.id, article.title);
 			}
-				
-				System.out.println("게시글이 있습니다.");
 			}
 			
 			else if (command.length() == 0) {
@@ -55,6 +54,7 @@ public class Main {
 				continue;
 				// 아무것도 안쓰고 엔터치면 명령어 쓰라고 해야됨.
 			}
+			
 			
 			else if (command.startsWith("article detail ")) {
 				//article detail로 시작한다면~
@@ -80,14 +80,15 @@ public class Main {
 				// id 찾고 article에 연결되서 foundArticle에 넣는다면~
 					System.out.printf("%d번 게시물은 존재합니다.\n", id);
 					System.out.printf("번호 : %d\n",foundArticle.id);
-					System.out.printf("날짜 : 2022-12-12 12:12:12\n");
+					System.out.printf("날짜 : %s\n",foundArticle.regDate);
 					System.out.printf("제목 : %s\n",foundArticle.title);
 					System.out.printf("내용 : %s\n",foundArticle.body);
-				
-				
 			}
 			
+			
 			else if (command.equals("article write")) {
+				String regDate = Util.getNowDateStr();
+				// 설계도에게 바로 일 시키려면 쩜 누르면됨. static 하면됨
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
 				System.out.printf("내용 : ");
@@ -99,9 +100,9 @@ public class Main {
 				// 만약에 그냥 마지막_번호++ 이라고 적으면
 				// 그건 id와는 전혀 상관없는 일이 된다.
 				// 그래서 id도 +1 해주던지 아니면 id에 마지막_번호 덮어쓰기
-				Article article = new Article(id, title, body);
+				Article article = new Article(id, regDate, title, body);
 				// 객체 리모콘을 담을 변수 article 생성.
-				// 인자로 번호, 제목, 내용이 있음
+				// 인자로 번호, 날짜, 제목, 내용이 있음
 				articles.add(article);
 				// Article 클래스만 담을 arraylist랑 연결한 변수 articles에
 				// article 변수가 나타내는 인자 가진 Article을 담겠다??
@@ -156,17 +157,20 @@ class Article {
 	int id;
 	String title;
 	String body;
+	String regDate;
 	// 아까 article 변수에 인자 담는다고 했어서
 	// 그 인자들 타입 선언해주기
 	
-	public Article(int id, String title, String body) {
+	
+	public Article(int id, String regDate, String title, String body) {
 		// 생성자 앞에는 되도록 public 붙여주기
-		// 인자와 매개변수 연결시키기
-		this.id = id;
-		this.title = title;
-		this.body = body;
-		// this 뒤에 있는건 이 클래스에서 선언한 변수들.
-		// = 오른쪽에 있는건 매개변수에서 받는것.
-		// 문자가 똑같으니까 좀 헷갈린다..
+				// 인자와 매개변수 연결시키기
+				this.id = id;
+				this.title = title;
+				this.body = body;
+				this.regDate = regDate;
+				// this 뒤에 있는건 이 클래스에서 선언한 변수들.
+				// = 오른쪽에 있는건 매개변수에서 받는것.
+				// 문자가 똑같으니까 좀 헷갈린다..	}
 	}
 }
