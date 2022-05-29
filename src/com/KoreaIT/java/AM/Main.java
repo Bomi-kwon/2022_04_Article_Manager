@@ -38,14 +38,14 @@ public class Main {
 				continue;
 				// 게시글이 없다고만 하고 끝나지 않고
 				// 다시 스킵하고 위로 올라가도록 continue 해줘야됨.
-			} System.out.printf("번호 | 제목\n");
+			} System.out.printf("번호  | 제목   | 조회 \n");
 				for (int i = articles.size()-1; i >=0; i--) {
 				Article article = articles.get(i);
 				// i가 변할 때마다 노트에 작성중(기억중)
 				// article size가 3이면 index는 0,1,2 있으므로
 				// size - 1 부터 시작해야됨!
 				// 글은 보통 최신순으로 있기때문에 거꾸로 나타내야됨!
-				System.out.printf("%d | %s\n", article.id, article.title);
+				System.out.printf("%5d | %5s  |  %4d\n", article.id, article.title, article.hit);
 			}
 			}
 			
@@ -77,12 +77,15 @@ public class Main {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n",id);
 					continue;
 				} 
+				foundArticle.increaseHit();
+				// increaseHit 함수 버튼 누를 때마다 조회수 하나씩 증가함
 				// id 찾고 article에 연결되서 foundArticle에 넣는다면~
 					System.out.printf("%d번 게시물은 존재합니다.\n", id);
 					System.out.printf("번호 : %d\n",foundArticle.id);
 					System.out.printf("날짜 : %s\n",foundArticle.regDate);
 					System.out.printf("제목 : %s\n",foundArticle.title);
 					System.out.printf("내용 : %s\n",foundArticle.body);
+					System.out.printf("조회 : %s\n",foundArticle.hit);
 			}
 			
 			
@@ -184,6 +187,7 @@ class Article {
 	String title;
 	String body;
 	String regDate;
+	int hit;
 	// 아까 article 변수에 인자 담는다고 했어서
 	// 그 인자들 타입 선언해주기
 	
@@ -195,8 +199,12 @@ class Article {
 				this.title = title;
 				this.body = body;
 				this.regDate = regDate;
+				this.hit = 0;
 				// this 뒤에 있는건 이 클래스에서 선언한 변수들.
 				// = 오른쪽에 있는건 매개변수에서 받는것.
 				// 문자가 똑같으니까 좀 헷갈린다..	}
+	}
+	public void increaseHit() {
+		hit++;
 	}
 }
