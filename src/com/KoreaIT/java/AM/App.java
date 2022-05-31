@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.KoreaIT.java.AM.controller.ArticleController;
+import com.KoreaIT.java.AM.controller.Controller;
 import com.KoreaIT.java.AM.controller.MemberController;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
@@ -43,6 +44,7 @@ public class App {
 		// App이 하는 일이 너무 많으니까 부하직원 두고 일 나눠서 하자!!
 		// 은행 창구 직원같은 cotroller 따로 만들어주기!!
 		// App은 더 높은 service임
+		
 		MemberController memberController = new MemberController(sc, members);
 		ArticleController articleController = new ArticleController(sc, articles);
 
@@ -63,20 +65,35 @@ public class App {
 				continue;
 				// 아무것도 안쓰고 엔터치면 명령어 쓰라고 해야됨.
 			}
-
-			else if (command.startsWith("article list")) {
-				articleController.showList(command);
-			} else if (command.startsWith("article detail ")) {
-				articleController.showDetail(command);
-			} else if (command.startsWith("article modify ")) {
-				articleController.doModify(command);
-			} else if (command.equals("article write")) {
-				articleController.doWrite();
-			} else if (command.equals("member join")) {
-				memberController.doJoin();
-			} else if (command.startsWith("article delete ")) {
-				articleController.deDelete(command);
-			} else if (command.equals("System exit")) {
+			
+			String[] commandBits = command.split(" ");
+			
+			if (commandBits.length == 1) {
+				System.out.println("존재하지 않는 명령어입니다.");
+				continue;
+			}
+ 			String controllerName = commandBits[0];
+ 			String actionMethodName = commandBits[1];
+			
+			Controller controller = null;
+			// 컨트롤러 새로 만들어서 들어오는 입력어가
+			// article로 시작하면 articleController로,
+			// member로 시작하면 memberController로 바꿔주고
+			// 각자에게 일 시키기
+			// 그 다음 입력어가 뭐인지에 따라
+			// 각각 다른거 행하도록 시키기
+			
+			if(controllerName.equals("article")) {
+				controller = articleController;
+			}
+			else if (controllerName.equals("member")) {
+				controller = memberController;
+			}
+			
+			controller.doAction(command,actionMethodName);
+			
+			
+			if (command.equals("System exit")) {
 				break; // 반복문 평생 실행되지 않도록
 				// System exit 명령어 치면 반복문 깨고 나오도록 꼭 써주기.
 			}
@@ -84,6 +101,7 @@ public class App {
 			else {
 				System.out.println("존재하지 않는 명령어입니다.");
 				// 이상한 거 치면 존재하지 않는 명령어라고 막아야됨.
+				continue;
 			}
 		}
 		sc.close();

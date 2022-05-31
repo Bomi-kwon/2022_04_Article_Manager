@@ -7,14 +7,39 @@ import java.util.Scanner;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 	private Scanner sc;
 	private List<Article> articles;
+	private String command;
+	private String actionMethodName;
 
 	public ArticleController(Scanner sc, List<Article> articles) {
 		// App에서 썼던거 인자와 매개변수로 받아줘야됨.
 		this.sc = sc;
 		this.articles = articles;
+	}
+
+	public void doAction(String command, String actionMethodName) {
+		this.command = command;
+		this.actionMethodName = actionMethodName;
+
+		switch (actionMethodName) {
+		case "list":
+			showList();
+			break;
+		case "detail":
+			showDetail();
+			break;
+		case "write":
+			doWrite();
+			break;
+		case "modify":
+			doModify();
+			break;
+		case "delete":
+			doDelete();
+			break;
+		}
 	}
 
 	public void doWrite() {
@@ -39,7 +64,7 @@ public class ArticleController {
 		// 여기는 해석이 잘.. 안된다.
 	}
 
-	public void showList(String command) {
+	public void showList() {
 		if (articles.size() == 0) {
 			System.out.println("게시글이 없습니다.");
 			return;
@@ -73,7 +98,7 @@ public class ArticleController {
 		}
 	}
 
-	public void showDetail(String command) {
+	public void showDetail() {
 		// article detail로 시작한다면~
 		String[] commandBits = command.split(" ");
 		// 입력한걸 띄어쓰기를 기준으로 자르겠다.
@@ -97,44 +122,7 @@ public class ArticleController {
 		System.out.printf("조회 : %s\n", foundArticle.hit);
 	}
 
-	private int getArticleIndexById(int id) {
-		int i = 0;
-		for (Article article : articles) {
-			if (article.id == id) {
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
-
-	private Article getArticleById(int id) {
-		int index = getArticleIndexById(id);
-		if (index != -1) {
-			return articles.get(index);
-		}
-		return null;
-
-//		for (int i = 0; i < articles.size(); i++) {
-//			Article article = articles.get(i);
-//			// for 반복문을 돌 때마다 arraylist을 순회(풀스캔)하며 i를 뽑아오겠다.
-//			if (article.id == id) {
-//				// 생성된 게시물의 번호와 commmandBits[2]와 똑같다면
-//				return article;
-//				// 찾았으면, foundArticle에 article을 덮어쓰겠다.
-//			}
-//		}
-
-//		for (Article article : articles) {
-//			if (article.id == id) {
-//				return article;
-//			}
-//		}
-//		return null;
-
-	}
-
-	public void deDelete(String command) {
+	public void doDelete() {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
 		int foundIndex = getArticleIndexById(id);
@@ -146,7 +134,7 @@ public class ArticleController {
 		System.out.printf("%d번 게시물을 삭제하였습니다.\n", id);
 	}
 
-	public void doModify(String command) {
+	public void doModify() {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
 		Article foundArticle = getArticleById(id);
@@ -164,4 +152,22 @@ public class ArticleController {
 		System.out.printf("%d번 게시물을 수정했습니다.\n", id);
 	}
 
+	private int getArticleIndexById(int id) {
+		int i = 0;
+		for (Article article : articles) {
+			if (article.id == id) {
+				return i;
+			}
+			i++;
+		}
+		return -1;
+	}
+
+	private Article getArticleById(int id) {
+		int index = getArticleIndexById(id);
+		if (index != -1) {
+			return articles.get(index);
+		}
+		return null;
+	}
 }
