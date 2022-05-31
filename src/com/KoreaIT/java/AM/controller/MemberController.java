@@ -9,13 +9,11 @@ import com.KoreaIT.java.AM.util.Util;
 public class MemberController {
 	private Scanner sc;
 	private List<Member> members;
-
 	public MemberController(Scanner sc, List<Member> members) {
-		
+		// App에서 썼던거 인자와 매개변수로 받아줘야됨.
 		this.sc = sc;
 		this.members = members;
 	}
-
 
 	public void doJoin() {
 		int id = members.size() + 1;
