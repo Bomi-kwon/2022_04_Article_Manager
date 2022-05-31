@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.KoreaIT.java.AM.controller.ArticleController;
+import com.KoreaIT.java.AM.controller.MemberController;
 import com.KoreaIT.java.AM.dto.Article;
 import com.KoreaIT.java.AM.dto.Member;
 import com.KoreaIT.java.AM.util.Util;
@@ -37,6 +39,11 @@ public class App {
 		makeTestData();
 
 		Scanner sc = new Scanner(System.in);
+		// App이 하는 일이 너무 많으니까 부하직원 두고 일 나눠서 하자!!
+		// 은행 창구 직원같은 cotroller 따로 만들어주기!!
+		// App은 더 높은 service임
+		MemberController memberController = new MemberController(sc, members);
+		ArticleController articleController = new ArticleController();
 
 		// id는 꼭 반복문 밖에다가 정의해야한다!!
 		// 안에서 정의하면 계속 0으로 초기화되기 때문!!
@@ -155,41 +162,9 @@ public class App {
 			}
 
 			else if (command.equals("member join")) {
-				int id = members.size() + 1;
-				String regDate = Util.getNowDateStr();
-				String loginId = null;
-				//liginId를 반복문 안에서 만든거라 밑에 인자가 몰라봐서
-				// 반복문 밖에 처음으로 만들어야됨.
-				while(true) {
-					System.out.printf("로그인 아이디 : ");
-				loginId = sc.nextLine();
-				if (isJoinableLoginId(loginId) == false) {
-					// 함수가 거짓이라면 처음 쓰는 아이디 쓸때까지 계속 붙잡아야됨.
-					System.out.printf("%s는(은) 이미 사용중인 아이디입니다.\n", loginId);
-					continue;
-				}
-				break;
-				}
-				String loginPW = null;
-				String loginPWConfirm = null;
-				while (true) {
-					System.out.printf("로그인 비밀번호 : ");
-					loginPW = sc.nextLine();
-					System.out.printf("로그인 비밀번호 확인 : ");
-					loginPWConfirm = sc.nextLine();
-					// 비밀번호 재확인 해줘야됨
-					if (loginPW.equals(loginPWConfirm) == false) {
-						System.out.println("비밀번호를 다시 입력해주세요.");
-						continue;
-						// 만약 비밀번호랑 확인이랑 다르면 계속 붙잡아야됨!
-					}
-					break;
-				}
-				System.out.printf("이름 : ");
-				String name = sc.nextLine();
-				Member member = new Member(id, regDate, loginId, loginPW, name);
-				members.add(member);
-				System.out.printf("%d번 회원이 가입했습니다.\n", id);
+				
+				memberController.doJoin();
+				
 			}
 
 			else if (command.startsWith("article delete ")) {
@@ -221,29 +196,7 @@ public class App {
 		System.out.println("==프로그램 끝==");
 	}
 
-	private boolean isJoinableLoginId(String loginId) {
-		int index = getMemberIndexByLoginId(loginId);
-		
-		if (index == -1) {
-			return true;
-		}
-		// 일치하는 index 있으면 false라서 계속 다시 입력하라고 하고
-		// 일치하는 index 없으면 -1이고 true라서 계속 진행됨!
-		
-		return false;
-	}
-	private int getMemberIndexByLoginId(String loginId) {
-		int i = 0;
-		for(Member member : members) {
-			if(member.loginId.equals(loginId)) {
-				return i;
-			}
-			i++;
-		}
-		return -1;
-		// Member arrayList를 뒤져서 일치하는 index 있으면 그걸 리턴하기
-		// 일치하는 index없으면 -1을 리턴하고 그래야 true됨!
-	}
+	
 	private int getArticleIndexById(int id) {
 		int i = 0;
 		for (Article article : articles) {
